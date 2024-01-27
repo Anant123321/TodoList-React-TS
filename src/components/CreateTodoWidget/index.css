@@ -1,0 +1,48 @@
+.task_input_widget {
+  display: flex;
+  align-items: center;
+  width: 90%;
+  position: relative;
+}
+
+.task_input_widget_field {
+  width: 100%;
+  border-radius: 50px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  padding-left: 30px;
+  padding-right: 70px;
+  font-size: 25px;
+  border: none;
+  box-shadow: inset 0 0 5px black;
+}
+.task_input_widget_field:focus {
+  box-shadow: 0 0 10px 1000px rgba(0, 0, 0, 0.5);
+}
+
+.task_input_widget_button {
+  position: absolute;
+  right: 0;
+  margin: 12px;
+  background-color: #2f74c0;
+  color: white;
+  height: 50px;
+  width: 50px;
+  border-radius: 50px;
+  box-shadow: 0 0 10px 0px black;
+  transition: 0.3s;
+  border: none;
+}
+
+.task_input_widget_button:hover {
+  background-color: #388ae2;
+}
+
+.task_input_widget_button:hover {
+  background-color: #388ae2;
+}
+
+.task_input_widget_button:active {
+  transform: scale(0.8);
+  box-sizing: 0 0 5px 0px black;
+}

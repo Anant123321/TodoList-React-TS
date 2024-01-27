@@ -1,11 +1,10 @@
-import './styles/index.css'
-import Spiderman from './assets/Spiderman.png'
-const App = () => {
+import TodoRenderer from './pages/Todo'
+
+const App: React.FC = () => {
   return (
-    <>
-      <h1>Hello World</h1>
-      <img src={Spiderman} alt="spiderman" />
-    </>
+    <div className="App">
+      <TodoRenderer />
+    </div>
   )
 }
 
