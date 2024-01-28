@@ -40,6 +40,14 @@
   }
 }
 
+.todo-list-pending.drag-active {
+  background-color: rgba(0, 255, 255, 0.8);
+}
+
+.todo-list-completed.drag-active {
+  background-color: rgba(255, 0, 0);
+}
+
 .task-title {
   color: white;
   font-size: 32px;
