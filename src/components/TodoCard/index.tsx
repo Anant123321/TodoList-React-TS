@@ -52,9 +52,9 @@ const TodoCard: React.FC<Props> = ({
   }
   return (
     <Draggable draggableId={id.toString()} index={index}>
-      {(provided) => (
+      {(provided, snapshot) => (
         <div
-          className="todo-card"
+          className={`todo-card ${snapshot.isDragging ? 'drag' : ''}`}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           ref={provided.innerRef}
