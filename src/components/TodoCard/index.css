@@ -2,12 +2,18 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  width: 29.5%;
+  width: 100%;
   border-radius: 5px;
   padding: 20px;
   margin-top: 15px;
   background-image: url('https://img.freepik.com/free-photo/crumpled-yellow-paper-background-close-up_60487-2390.jpg?size=626&ext=jpg');
   flex-wrap: wrap;
+  cursor: pointer;
+}
+
+.todo-card:hover {
+  transform: scale(1.03);
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.8);
 }
 
 .todo-icons {
@@ -26,16 +32,4 @@
   margin-left: 10px;
   cursor: pointer;
   font-size: 16px;
-}
-
-@media (max-width: 1200px) {
-  .todo-card {
-    width: 40%;
-  }
-}
-
-@media (max-width: 700px) {
-  .todo-card {
-    width: 90%;
-  }
 }
