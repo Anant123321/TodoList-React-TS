@@ -1,2 +1,4 @@
 export const COMPLETED = 'COMPLETED'
 export const PENDING = 'PENDING'
+export const PENDING_TODO_LIST = 'PENDING_TODO_LIST'
+export const COMPLTED_TODO_LIST = 'COMPLTED_TODO_LIST'

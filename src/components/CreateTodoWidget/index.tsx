@@ -4,10 +4,10 @@ import { TodoType } from '../../types/Todo'
 import { PENDING } from '../../constants'
 
 type Props = {
-  setTodoList: React.Dispatch<React.SetStateAction<TodoType[]>>
+  setPendingTodoList: React.Dispatch<React.SetStateAction<TodoType[]>>
 }
 
-const CreateTaskWidget: React.FC<Props> = ({ setTodoList }) => {
+const CreateTaskWidget: React.FC<Props> = ({ setPendingTodoList }) => {
   const [todoValue, setTodoValue] = useState<string>('')
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -25,7 +25,7 @@ const CreateTaskWidget: React.FC<Props> = ({ setTodoList }) => {
         status: PENDING,
         id: Date.now(),
       }
-      setTodoList((prev) => [...prev, toDo])
+      setPendingTodoList((prev) => [...prev, toDo])
       setTodoValue('')
       inputRef.current?.blur()
     }

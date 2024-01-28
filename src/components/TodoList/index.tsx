@@ -1,76 +1,140 @@
-import { COMPLETED, PENDING } from '../../constants'
-import { TodoType } from '../../types/Todo'
+import { Droppable } from 'react-beautiful-dnd'
+import {
+  COMPLETED,
+  COMPLTED_TODO_LIST,
+  PENDING,
+  PENDING_TODO_LIST,
+} from '../../constants'
+import { TodoListType, TodoType } from '../../types/Todo'
 import TodoCard from '../TodoCard'
 import './index.css'
 
 type Props = {
-  todoList: TodoType[]
-  setTodoList: React.Dispatch<React.SetStateAction<TodoType[]>>
+  pendingTodoList: TodoType[]
+  setPendingTodoList: React.Dispatch<React.SetStateAction<TodoType[]>>
+  completedTodoList: TodoType[]
+  setCompletedTodoList: React.Dispatch<React.SetStateAction<TodoType[]>>
 }
-const TodosList: React.FC<Props> = ({ todoList, setTodoList }) => {
-  const deleteTodo: (id: number) => void = (id) => {
-    const updatedList: TodoType[] = todoList.filter((todo) => {
+const TodosList: React.FC<Props> = ({
+  pendingTodoList,
+  setPendingTodoList,
+  completedTodoList,
+  setCompletedTodoList,
+}) => {
+  const getListType: (type: TodoListType) => {
+    list: TodoType[]
+    setList: React.Dispatch<React.SetStateAction<TodoType[]>>
+  } = (type) => {
+    switch (type) {
+      case PENDING_TODO_LIST:
+        return { list: pendingTodoList, setList: setPendingTodoList }
+      default:
+        return { list: completedTodoList, setList: setCompletedTodoList }
+    }
+  }
+  const deleteTodo: (id: number, listType: TodoListType) => void = (
+    id,
+    listType
+  ) => {
+    const { list, setList } = getListType(listType)
+    const updatedList: TodoType[] = list.filter((todo) => {
       return todo.id !== id
     })
-    setTodoList(updatedList)
+    setList(updatedList)
   }
-  const completeTodo: (id: number) => void = (id) => {
-    const updatedList: TodoType[] = todoList.map((todo) => {
-      if (todo.id === id) {
-        return {
-          ...todo,
-          status: COMPLETED,
-        }
-      }
-      return todo
+  const completeTodo: (todo: TodoType, listType: TodoListType) => void = (
+    todo,
+    listType
+  ) => {
+    const updatedTodo: TodoType = {
+      ...todo,
+      status: todo.status === COMPLETED ? PENDING : COMPLETED,
+    }
+    const { list: sourceList, setList: setSourceList } = getListType(listType)
+    const { list: destinationList, setList: setDestinationList } = getListType(
+      updatedTodo.status === COMPLETED ? COMPLTED_TODO_LIST : PENDING_TODO_LIST
+    )
+    const updatedSourceList = sourceList.filter((todoItem) => {
+      return todoItem.id !== todo.id
     })
-    setTodoList(updatedList)
+    destinationList.push(updatedTodo)
+    setSourceList(updatedSourceList)
+    setDestinationList(destinationList)
   }
-  const updateTodo: (todo: TodoType) => void = (updatedTodo) => {
-    const updatedList: TodoType[] = todoList.map((todo) => {
+  const updateTodo: (updatedTodo: TodoType, listType: TodoListType) => void = (
+    updatedTodo,
+    listType
+  ) => {
+    const { list, setList } = getListType(listType)
+    const updatedList: TodoType[] = list.map((todo) => {
       if (todo.id === updatedTodo.id) {
         return updatedTodo
       }
       return todo
     })
-    setTodoList(updatedList)
+    setList(updatedList)
   }
-  const pendingTodos: TodoType[] = todoList.filter((todo) => {
-    return todo.status === PENDING
-  })
-  const completedTodos: TodoType[] = todoList.filter((todo) => {
-    return todo.status === COMPLETED
-  })
+
   return (
     <div className="todo-list-container">
-      <div className="todo-list-pending">
-        <p className="task-title">Active tasks</p>
-        {pendingTodos.map((todo) => {
-          return (
-            <TodoCard
-              key={todo.id}
-              todo={todo}
-              deleteTodo={deleteTodo}
-              completeTodo={completeTodo}
-              updateTodo={updateTodo}
-            />
-          )
-        })}
-      </div>
-      <div className="todo-list-completed">
-        <p className="task-title">Completed tasks</p>
-        {completedTodos.map((todo) => {
-          return (
-            <TodoCard
-              key={todo.id}
-              todo={todo}
-              deleteTodo={deleteTodo}
-              completeTodo={completeTodo}
-              updateTodo={updateTodo}
-            />
-          )
-        })}
-      </div>
+      <Droppable droppableId={PENDING_TODO_LIST}>
+        {(provided) => (
+          <div
+            className="todo-list-pending"
+            ref={provided.innerRef}
+            {...provided.droppableProps}
+          >
+            <p className="task-title">Active tasks</p>
+            {pendingTodoList.map((todo, index) => {
+              return (
+                <TodoCard
+                  index={index}
+                  key={todo.id}
+                  todo={todo}
+                  deleteTodo={(id: number) => deleteTodo(id, PENDING_TODO_LIST)}
+                  completeTodo={(todo: TodoType) =>
+                    completeTodo(todo, PENDING_TODO_LIST)
+                  }
+                  updateTodo={(todo: TodoType) =>
+                    updateTodo(todo, PENDING_TODO_LIST)
+                  }
+                />
+              )
+            })}
+            {provided.placeholder}
+          </div>
+        )}
+      </Droppable>
+      <Droppable droppableId={COMPLTED_TODO_LIST}>
+        {(provided) => (
+          <div
+            className="todo-list-completed"
+            ref={provided.innerRef}
+            {...provided.droppableProps}
+          >
+            <p className="task-title">Completed tasks</p>
+            {completedTodoList.map((todo, index) => {
+              return (
+                <TodoCard
+                  index={index}
+                  key={todo.id}
+                  todo={todo}
+                  deleteTodo={(id: number) =>
+                    deleteTodo(id, COMPLTED_TODO_LIST)
+                  }
+                  completeTodo={(todo: TodoType) =>
+                    completeTodo(todo, COMPLTED_TODO_LIST)
+                  }
+                  updateTodo={(todo: TodoType) =>
+                    updateTodo(todo, COMPLTED_TODO_LIST)
+                  }
+                />
+              )
+            })}
+            {provided.placeholder}
+          </div>
+        )}
+      </Droppable>
     </div>
   )
 }
